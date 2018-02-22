@@ -14,5 +14,12 @@ class RequestHandler {
       )}&dateTo=${encodeURIComponent(this._formatDate(dateTo))}&partner=picky&partner_market=us`
     );
   }
+  static getLocations(term) {
+     let result =  axios.get(
+      `https://api.skypicker.com/locations/?term=${term}&v=3&locale=en-US`
+    );
+     console.log(result, "RESUTL");
+      return result;
+  }
 }
 export default RequestHandler;
