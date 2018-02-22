@@ -10,6 +10,9 @@ import TextField from "material-ui/TextField";
 import Button from "material-ui/Button";
 import { CircularProgress } from "material-ui/Progress";
 
+//custom components
+import Form from "./components/Form.js"
+
 // api calls
 import RequestHandler from "./request-handler/request-handler";
 
@@ -75,57 +78,7 @@ class App extends Component {
   _getForm() {
     return (
       <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
-        <Paper style={{ padding: "0 24px" }}>
-          <TextField
-            id="from"
-            label="From"
-            type="search"
-            margin="normal"
-            onChange={this._onChangeForm}
-            value={this.state.from}
-          />
-          <TextField
-            id="to"
-            label="To"
-            type="search"
-            margin="normal"
-            onChange={this._onChangeForm}
-            value={this.state.to}
-          />
-          <TextField
-            id="dateFrom"
-            label="Date from"
-            type="date"
-            defaultValue="2017-05-24"
-            InputLabelProps={{
-              shrink: true
-            }}
-            onChange={this._onChangeForm}
-            value={this.state.dateFrom}
-          />
-          <TextField
-            id="dateTo"
-            label="Date to"
-            type="date"
-            defaultValue="2017-05-24"
-            InputLabelProps={{
-              shrink: true
-            }}
-            onChange={this._onChangeForm}
-            value={this.state.dateTo}
-          />
-          <Button
-            variant="raised"
-            color="primary"
-            onClick={this._loadData}
-            type={"submit"}
-          >
-            Find flight
-          </Button>
-          <Button variant="raised" color="secondary">
-            Reset
-          </Button>
-        </Paper>
+        <Form/>
       </Grid>
     );
   }
