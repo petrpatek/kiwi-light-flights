@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import moment from "moment"
 
 // MUI components
 import Paper from "material-ui/Paper";
@@ -13,15 +14,23 @@ import RequestHandler from "../request-handler/request-handler";
 class Form extends Component {
   constructor(props) {
     super(props);
+    let dates = this._getInitalDates();
     this.state = {
       from: "",
       to: "",
-      dateFrom: "",
-      dateTo: "",
+      dateFrom: dates[0],
+      dateTo: dates[1],
       locations: []
     };
     this._onChangeForm = this._onChangeForm.bind(this);
     this._loadSuggestions = this._loadSuggestions.bind(this);
+    this._submitForm = this._submitForm.bind(this);
+    this._resetFrom = this._resetFrom.bind(this);
+  }
+  _getInitalDates(){
+      let now = moment(new Date());
+      let format = "YYYY-MM-DD";
+      return[now.format(format), now.add(5,"days").format(format)]
   }
 
   _onChangeForm(event, setStateCallback) {
@@ -63,6 +72,13 @@ class Form extends Component {
 
       />)
   }
+  _submitForm(){
+      this.props.loadData(this.state)
+  }
+  _resetFrom(){
+      let dates = this._getInitalDates();
+      this.setState({from: "", to:"", dateFrom:dates[0], dateTo:dates[1]})
+  }
 
   render() {
     return (
@@ -73,7 +89,6 @@ class Form extends Component {
           id="dateFrom"
           label="Date from"
           type="date"
-          defaultValue="2017-05-24"
           InputLabelProps={{
             shrink: true
           }}
@@ -84,7 +99,6 @@ class Form extends Component {
           id="dateTo"
           label="Date to"
           type="date"
-          defaultValue="2017-05-24"
           InputLabelProps={{
             shrink: true
           }}
@@ -94,12 +108,12 @@ class Form extends Component {
         <Button
           variant="raised"
           color="primary"
-          onClick={this._loadData}
-          type={"submit"}
+          onClick={this._submitForm}
+          type="submit"
         >
           Find flight
         </Button>
-        <Button variant="raised" color="secondary">
+        <Button variant="raised" color="secondary" onClick={this._resetFrom} type="reset">
           Reset
         </Button>
       </Paper>
