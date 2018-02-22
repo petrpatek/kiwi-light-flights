@@ -109,7 +109,10 @@ class App extends Component {
               <Typography variant="subheading">
                 {`Departure: ${this._getDateFromUnix(
                   flight.dTime
-                )} Arrival: ${this._getDateFromUnix(flight.aTime)} `}
+                )}`}
+              </Typography>
+                <Typography variant="subheading">
+                {`Arrival: ${this._getDateFromUnix(flight.aTime)}`}
               </Typography>
               <p>{`${flight.flyFrom} => ${flight.flyTo}`}</p>
               <p>{`Flight Duration: ${flight.fly_duration} `}</p>
@@ -129,6 +132,7 @@ class App extends Component {
         <Grid container spacing={24}>
           {this._getForm()}
           {this.state.error ? this._showError() : this._showFlights()}
+
         </Grid>
       </div>
     );

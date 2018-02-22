@@ -55,7 +55,7 @@ class Form extends Component {
     this.setState(state);
   }
   _getAutoComplete(type){
-      return(<AutoComplete
+      return(<div><AutoComplete
           getItemValue={item => item.name}
           items={this.state.locations}
           renderItem={(item, isHighlighted) => (
@@ -69,8 +69,8 @@ class Form extends Component {
               this._onChangeForm(event, this._loadSuggestions(event.target.id))
           }
           onSelect={(value) =>this._setSelected(type, value)}
-
-      />)
+      />
+      </div>)
   }
   _submitForm(){
       this.props.loadData(this.state)
@@ -82,7 +82,7 @@ class Form extends Component {
 
   render() {
     return (
-      <Paper style={{ padding: "0 24px" }}>
+      <Paper style={{ padding: "24px", display: "flex", alignItems:"center", justifyContent: "space-between" }}>
           {this._getAutoComplete("from")}
           {this._getAutoComplete("to")}
         <TextField
