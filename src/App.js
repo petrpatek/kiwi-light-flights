@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 
 // MUI components
 import Typography from "material-ui/Typography";
@@ -6,12 +7,10 @@ import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
 import Paper from "material-ui/Paper";
 import Grid from "material-ui/Grid";
-import TextField from "material-ui/TextField";
-import Button from "material-ui/Button";
 import { CircularProgress } from "material-ui/Progress";
 
 //custom components
-import Form from "./components/Form.js"
+import Form from "./components/Form.js";
 
 // api calls
 import RequestHandler from "./request-handler/request-handler";
@@ -31,15 +30,17 @@ class App extends Component {
     this._showFlights = this._showFlights.bind(this);
     this.loadData = this.loadData.bind(this);
   }
+
   loadData(data) {
-        this.setState({ loading: true });
-        RequestHandler.getFlights(
-            data.from,
-            data.to,
-            data.dateFrom,
-            data.dateTo
-        ).then(this._onLoadSuccess, this._onLoadError);
-    }
+    this.setState({ loading: true });
+    RequestHandler.getFlights(
+      data.from,
+      data.to,
+      data.dateFrom,
+      data.dateTo
+    ).then(this._onLoadSuccess, this._onLoadError);
+  }
+
   _onLoadSuccess(result) {
     this.setState({
       data: result,
@@ -75,9 +76,13 @@ class App extends Component {
   _getForm() {
     return (
       <Grid item xs={12}>
-        <Form loadData={this.loadData}/>
+        <Form loadData={this.loadData} />
       </Grid>
     );
+  }
+
+  _getDateFromUnix(timeStamp) {
+    return moment(timeStamp, "X").format("DD-MM-YYYY HH:mm");
   }
 
   _showError() {}
@@ -86,22 +91,35 @@ class App extends Component {
     let result;
     if (this.state.loading) {
       result = (
-        <Paper>
-          <CircularProgress />
-        </Paper>
+        <Grid item xs={12}>
+          <Paper>
+            <CircularProgress />
+          </Paper>
+        </Grid>
       );
     } else if (this.state.data) {
       result = this.state.data.data.data.map((flight, index) => {
+        console.log(flight.duration, "Flight");
         return (
-          <Grid item>
-            <Paper>
-              <Typography>{`${flight.flyFrom} => ${flight.flyTo}`}</Typography>
+          <Grid item xs={4} key={index}>
+            <Paper style={{ padding: "24px" }} key={index}>
+              <Typography variant="title">
+                {`${flight.cityFrom} - ${flight.cityTo}`}
+              </Typography>
+              <Typography variant="subheading">
+                {`Departure: ${this._getDateFromUnix(
+                  flight.dTime
+                )} Arrival: ${this._getDateFromUnix(flight.aTime)} `}
+              </Typography>
+              <p>{`${flight.flyFrom} => ${flight.flyTo}`}</p>
+              <p>{`Flight Duration: ${flight.fly_duration} `}</p>
+              <p>{`Price: ${flight.price} ${this.state.data.data.currency}`}</p>
             </Paper>
           </Grid>
         );
       });
     }
-    return <Grid container>{result}</Grid>;
+    return result;
   }
 
   render() {
@@ -110,9 +128,7 @@ class App extends Component {
         {this._getHeader()}
         <Grid container spacing={24}>
           {this._getForm()}
-          <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
-            {this.state.error ? this._showError() : this._showFlights()}
-          </Grid>
+          {this.state.error ? this._showError() : this._showFlights()}
         </Grid>
       </div>
     );
