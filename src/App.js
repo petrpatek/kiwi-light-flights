@@ -20,19 +20,26 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      from: "",
-      to: "",
-      dateFrom: "",
-      dateTo: "",
       data: "",
       error: ""
     };
+
     this._onChangeForm = this._onChangeForm.bind(this);
-    this._loadData = this._loadData.bind(this);
+    this.loadData = this.loadData.bind(this);
     this._onLoadSuccess = this._onLoadSuccess.bind(this);
     this._onLoadError = this._onLoadError.bind(this);
     this._showFlights = this._showFlights.bind(this);
+    this.loadData = this.loadData.bind(this);
   }
+  loadData(data) {
+        this.setState({ loading: true });
+        RequestHandler.getFlights(
+            data.from,
+            data.to,
+            data.dateFrom,
+            data.dateTo
+        ).then(this._onLoadSuccess, this._onLoadError);
+    }
   _onLoadSuccess(result) {
     this.setState({
       data: result,
@@ -42,16 +49,6 @@ class App extends Component {
 
   _onLoadError(error) {
     this.setState({ error: error, loading: false });
-  }
-
-  _loadData() {
-    this.setState({ loading: true });
-    RequestHandler.getFlights(
-      this.state.from,
-      this.state.to,
-      this.state.dateFrom,
-      this.state.dateTo
-    ).then(this._onLoadSuccess, this._onLoadError);
   }
 
   _onChangeForm(event) {
@@ -77,8 +74,8 @@ class App extends Component {
 
   _getForm() {
     return (
-      <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
-        <Form/>
+      <Grid item xs={12}>
+        <Form loadData={this.loadData}/>
       </Grid>
     );
   }
