@@ -7,10 +7,7 @@ import Paper from "material-ui/Paper";
 import Typography from "material-ui/Typography";
 
 class Flight extends Component {
-  constructor(props) {
-    super(props);
-  }
-   _getDateFromUnix(timeStamp) {
+  _getDateFromUnix(timeStamp) {
     return moment(timeStamp, "X").format("DD-MM-YYYY HH:mm");
   }
 

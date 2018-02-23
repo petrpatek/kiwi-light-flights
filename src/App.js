@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import moment from "moment";
 
 // MUI components
 import Typography from "material-ui/Typography";
@@ -47,11 +46,11 @@ class App extends Component {
       this.state.offset
     ).then(this._onLoadSuccess, this._onLoadError);
   }
-  setError(error){
-    this.setState({error: error})
+  setError(error) {
+    this.setState({ error: error });
   }
 
-   _getHeader() {
+  _getHeader() {
     return (
       <header>
         <AppBar position="static" color="primary">
