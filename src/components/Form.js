@@ -44,13 +44,13 @@ class Form extends Component {
   _loadSuggestions(stateKey) {
     RequestHandler.getLocations(this.state[stateKey]).then(data => {
       let stateObj = {};
-      stateObj.locations = data.data.locations;
+      stateObj[`locations`] = data.data.locations;
       console.log(data);
       this.setState(stateObj);
     });
   }
   _setSelected(stateKey, value) {
-    let state = {};
+    let state = {locations: []};
     state[stateKey] = value;
     this.setState(state);
   }
