@@ -40,14 +40,16 @@ class Form extends Component {
     console.log(event.target);
   }
 
-  //TODO: onRejected promise
   _loadSuggestions(stateKey) {
-    RequestHandler.getLocations(this.state[stateKey]).then(data => {
-      let stateObj = {};
-      stateObj[`locations`] = data.data.locations;
-      console.log(data);
-      this.setState(stateObj);
-    });
+    RequestHandler.getLocations(this.state[stateKey]).then(
+      data => {
+        let stateObj = {};
+        stateObj[`locations`] = data.data.locations;
+        console.log(data);
+        this.setState(stateObj);
+      },
+      reason => this.props.setError(reason)
+    );
   }
   _setSelected(stateKey, value) {
     let state = { locations: [] };
@@ -138,7 +140,8 @@ class Form extends Component {
 }
 
 Form.propTypes = {
-  loadData: PropTypes.func
+  loadData: PropTypes.func,
+  setError: PropTypes.func
 };
 
 export default Form;

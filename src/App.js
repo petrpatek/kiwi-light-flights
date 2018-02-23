@@ -34,6 +34,7 @@ class App extends Component {
     this._showFlights = this._showFlights.bind(this);
     this.loadData = this.loadData.bind(this);
     this._setOffset = this._setOffset.bind(this);
+    this.setError = this.setError.bind(this);
   }
 
   loadData(data) {
@@ -45,6 +46,9 @@ class App extends Component {
       data.dateTo,
       this.state.offset
     ).then(this._onLoadSuccess, this._onLoadError);
+  }
+  setError(error){
+    this.setState({error: error})
   }
 
    _getHeader() {
