@@ -26,7 +26,6 @@ class App extends Component {
       userInput: ""
     };
 
-    this._onChangeForm = this._onChangeForm.bind(this);
     this.loadData = this.loadData.bind(this);
     this._onLoadSuccess = this._onLoadSuccess.bind(this);
     this._onLoadError = this._onLoadError.bind(this);
@@ -99,15 +98,6 @@ class App extends Component {
      */
   _onLoadError(error) {
     this.setState({ error: error, loading: false });
-  }
-    /**
-     * Sets value by events target id
-     * @param {object} event - event.
-     */
-  _onChangeForm(event) {
-    let stateObj = {};
-    stateObj[event.target.id] = event.target.value;
-    this.setState(stateObj);
   }
     /**
      * gets form component
