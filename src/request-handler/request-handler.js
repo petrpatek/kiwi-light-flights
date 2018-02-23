@@ -7,12 +7,14 @@ class RequestHandler {
   }
   static  getFlights(from, to, dateFrom, dateTo, offset) {
       offset = offset ? offset : 0;
+
+     let limit = 5; //better solution would be to have the page size in config file and the import it
     return axios.get(
       `https://api.skypicker.com/flights?flyFrom=${encodeURIComponent(
         from
       )}&to=${encodeURIComponent(to)}&dateFrom=${encodeURIComponent(
           this._formatDate(dateFrom)
-      )}&dateTo=${encodeURIComponent(this._formatDate(dateTo))}&partner=picky&partner_market=us&offset=${offset}`
+      )}&dateTo=${encodeURIComponent(this._formatDate(dateTo))}&partner=picky&partner_market=us&offset=${offset}&limit=${limit}`
     );
   }
   static getLocations(term) {
