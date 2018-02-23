@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import moment from "moment";
-import ReactPaginate from "react-paginate";
 
 // MUI components
 import Typography from "material-ui/Typography";
@@ -13,6 +12,7 @@ import Button from "material-ui/Button";
 
 //custom components
 import Form from "./components/Form.js";
+import Flight from "./components/Flight.js";
 
 // api calls
 import RequestHandler from "./request-handler/request-handler";
@@ -23,7 +23,8 @@ class App extends Component {
     this.state = {
       data: "",
       error: "",
-      offset: 0
+      offset: 0,
+      userInput: ""
     };
 
     this._onChangeForm = this._onChangeForm.bind(this);
@@ -45,8 +46,25 @@ class App extends Component {
       this.state.offset
     ).then(this._onLoadSuccess, this._onLoadError);
   }
-  _setOffset(offset){
-      this.setState({offset: offset},()=> this.loadData(this.state.userInput))
+
+   _getHeader() {
+    return (
+      <header>
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography variant="title" color="inherit">
+              Light Flight Search
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </header>
+    );
+  }
+
+  _setOffset(offset) {
+    this.setState({ offset: offset }, () =>
+      this.loadData(this.state.userInput)
+    );
   }
 
   _onLoadSuccess(result) {
@@ -66,20 +84,6 @@ class App extends Component {
     this.setState(stateObj);
   }
 
-  _getHeader() {
-    return (
-      <header>
-        <AppBar position="static" color="primary">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              Light Flight Search
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </header>
-    );
-  }
-
   _getForm() {
     return (
       <Grid item xs={12}>
@@ -87,34 +91,31 @@ class App extends Component {
       </Grid>
     );
   }
-
-  _getDateFromUnix(timeStamp) {
-    return moment(timeStamp, "X").format("DD-MM-YYYY HH:mm");
+  _showError() {
+    return <p>{this.state.error}</p>;
   }
-
-  _showError() {}
 
   _getControls() {
     return (
-     <div>
-         <Button
-             variant="raised"
-             color="success"
-             type="submit"
-             onClick={()=>this._setOffset(this.state.offset - 5)}
-         >
-             {"< Previous page"}
-         </Button>
-         <span style={{margin: "8px"}}>{this.state.offset/5}</span>
-         <Button
-             variant="raised"
-             color="primary"
-             type="submit"
-             onClick={()=>this._setOffset(this.state.offset + 5)}
-         >
-             Next page >
-         </Button>
-     </div>
+      <div>
+        <Button
+          variant="raised"
+          color="default"
+          type="submit"
+          onClick={() => this._setOffset(this.state.offset - 5)}
+        >
+          {"< Previous page"}
+        </Button>
+        <span style={{ margin: "8px" }}>{this.state.offset / 5}</span>
+        <Button
+          variant="raised"
+          color="primary"
+          type="submit"
+          onClick={() => this._setOffset(this.state.offset + 5)}
+        >
+          Next page >
+        </Button>
+      </div>
     );
   }
 
@@ -132,20 +133,17 @@ class App extends Component {
       result = this.state.data.data.map((flight, index) => {
         return (
           <Grid item xs={4} key={index}>
-            <Paper style={{ padding: "24px" }} key={index}>
-              <Typography variant="title">
-                {`${flight.cityFrom} - ${flight.cityTo}`}
-              </Typography>
-              <Typography variant="subheading">
-                {`Departure: ${this._getDateFromUnix(flight.dTime)}`}
-              </Typography>
-              <Typography variant="subheading">
-                {`Arrival: ${this._getDateFromUnix(flight.aTime)}`}
-              </Typography>
-              <p>{`${flight.flyFrom} => ${flight.flyTo}`}</p>
-              <p>{`Flight Duration: ${flight.fly_duration} `}</p>
-              <p>{`Price: ${flight.price} ${this.state.data.currency}`}</p>
-            </Paper>
+            <Flight
+              currency={this.state.data.currency}
+              cityFrom={flight.cityFrom}
+              cityTo={flight.cityTo}
+              flyFrom={flight.flyFrom}
+              flyTo={flight.flyTo}
+              flyDuration={flight.fly_duration}
+              aTime={flight.aTime}
+              dTime={flight.dTime}
+              price={flight.price}
+            />
           </Grid>
         );
       });
