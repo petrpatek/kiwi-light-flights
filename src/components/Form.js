@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import moment from "moment"
+import moment from "moment";
 
 // MUI components
 import Paper from "material-ui/Paper";
@@ -27,10 +27,10 @@ class Form extends Component {
     this._submitForm = this._submitForm.bind(this);
     this._resetFrom = this._resetFrom.bind(this);
   }
-  _getInitalDates(){
-      let now = moment(new Date());
-      let format = "YYYY-MM-DD";
-      return[now.format(format), now.add(5,"days").format(format)]
+  _getInitalDates() {
+    let now = moment(new Date());
+    let format = "YYYY-MM-DD";
+    return [now.format(format), now.add(5, "days").format(format)];
   }
 
   _onChangeForm(event, setStateCallback) {
@@ -50,41 +50,52 @@ class Form extends Component {
     });
   }
   _setSelected(stateKey, value) {
-    let state = {locations: []};
+    let state = { locations: [] };
     state[stateKey] = value;
     this.setState(state);
   }
-  _getAutoComplete(type){
-      return(<div><AutoComplete
+  _getAutoComplete(type) {
+    return (
+      <div>
+        <label htmlFor={type}> {type}</label>
+        <AutoComplete
           getItemValue={item => item.name}
           items={this.state.locations}
           renderItem={(item, isHighlighted) => (
-              <div style={{ background: isHighlighted ? "lightgray" : "white" }}>
-                  {item.name}
-              </div>
+            <div style={{ background: isHighlighted ? "lightgray" : "white" }}>
+              {item.name}
+            </div>
           )}
           value={this.state[type]}
           inputProps={{ id: type, label: type.toUpperCase() }}
           onChange={event =>
-              this._onChangeForm(event, this._loadSuggestions(event.target.id))
+            this._onChangeForm(event, this._loadSuggestions(event.target.id))
           }
-          onSelect={(value) =>this._setSelected(type, value)}
-      />
-      </div>)
+          onSelect={value => this._setSelected(type, value)}
+        />
+      </div>
+    );
   }
-  _submitForm(){
-      this.props.loadData(this.state)
+  _submitForm() {
+    this.props.loadData(this.state);
   }
-  _resetFrom(){
-      let dates = this._getInitalDates();
-      this.setState({from: "", to:"", dateFrom:dates[0], dateTo:dates[1]})
+  _resetFrom() {
+    let dates = this._getInitalDates();
+    this.setState({ from: "", to: "", dateFrom: dates[0], dateTo: dates[1] });
   }
 
   render() {
     return (
-      <Paper style={{ padding: "24px", display: "flex", alignItems:"center", justifyContent: "space-between" }}>
-          {this._getAutoComplete("from")}
-          {this._getAutoComplete("to")}
+      <Paper
+        style={{
+          padding: "24px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
+        {this._getAutoComplete("from")}
+        {this._getAutoComplete("to")}
         <TextField
           id="dateFrom"
           label="Date from"
@@ -113,7 +124,12 @@ class Form extends Component {
         >
           Find flight
         </Button>
-        <Button variant="raised" color="secondary" onClick={this._resetFrom} type="reset">
+        <Button
+          variant="raised"
+          color="secondary"
+          onClick={this._resetFrom}
+          type="reset"
+        >
           Reset
         </Button>
       </Paper>
