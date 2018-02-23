@@ -9,7 +9,7 @@ import Grid from "material-ui/Grid";
 import { CircularProgress } from "material-ui/Progress";
 import Button from "material-ui/Button";
 
-//custom components
+// custom components
 import Form from "./components/Form.js";
 import Flight from "./components/Flight.js";
 
@@ -35,7 +35,11 @@ class App extends Component {
     this._setOffset = this._setOffset.bind(this);
     this.setError = this.setError.bind(this);
   }
-
+  // component interface
+    /**
+     * loads data about flights via RequestHandler and then triggers onPromiseFulfilled _onLoadSuccess and onPromiseRejected triggers _onLoadError
+     * @param {object} data - Object containing necessary information anout flight - from, to, dateFrom, dateTo.
+     */
   loadData(data) {
     this.setState({ loading: true, userInput: data });
     RequestHandler.getFlights(
@@ -46,10 +50,17 @@ class App extends Component {
       this.state.offset
     ).then(this._onLoadSuccess, this._onLoadError);
   }
+    /**
+     * Sets error
+     * @param {string} error - error message.
+     */
   setError(error) {
     this.setState({ error: error });
   }
-
+  // private methods
+    /**
+     * gets app header
+     */
   _getHeader() {
     return (
       <header>
@@ -63,30 +74,44 @@ class App extends Component {
       </header>
     );
   }
-
+    /**
+     * Sets offset
+     * @param {number} offset - number representing page offset.
+     */
   _setOffset(offset) {
     this.setState({ offset: offset }, () =>
       this.loadData(this.state.userInput)
     );
   }
-
+    /**
+     * Sets data loaded by loadData method and stops loading
+     * @param {object} result - request result.
+     */
   _onLoadSuccess(result) {
     this.setState({
       data: result.data,
       loading: false
     });
   }
-
+    /**
+     * Sets error, when loading flights ends with error
+     * @param {string} error - error message.
+     */
   _onLoadError(error) {
     this.setState({ error: error, loading: false });
   }
-
+    /**
+     * Sets value by events target id
+     * @param {object} event - event.
+     */
   _onChangeForm(event) {
     let stateObj = {};
     stateObj[event.target.id] = event.target.value;
     this.setState(stateObj);
   }
-
+    /**
+     * gets form component
+     */
   _getForm() {
     return (
       <Grid item xs={12}>
@@ -94,10 +119,15 @@ class App extends Component {
       </Grid>
     );
   }
+    /**
+     * Shows error
+     */
   _showError() {
     return <p>{this.state.error}</p>;
   }
-
+    /**
+     * gets pagination controls
+     */
   _getControls() {
     return (
       <div>
@@ -121,7 +151,9 @@ class App extends Component {
       </div>
     );
   }
-
+    /**
+     * gets flights if data about flights are loaded
+     */
   _showFlights() {
     let result;
     if (this.state.loading) {
@@ -153,7 +185,7 @@ class App extends Component {
     }
     return result;
   }
-
+  // render
   render() {
     return (
       <div>
